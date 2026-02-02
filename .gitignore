@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+venv/
+env/
+.venv/
+.vscode/
+.idea/
+.DS_Store
+tmdb_5000_movies.csv
+tmdb_5000_credits.csv
+.ipynb_checkpoints
