@@ -93,3 +93,34 @@ new_df['tags'] = new_df['tags'].apply(lambda x: x.lower()) # Lowercase for consi
 
 print("\nFeature Engineering Complete!")
 print(new_df.head())
+# --- PHASE 3: THE ENGINE ---
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import pickle
+
+# 1. VECTORIZATION
+# max_features=5000: We only care about the top 5000 most frequent words.
+# stop_words='english': Remove words like "the", "a", "in" which are useless for similarity.
+cv = CountVectorizer(max_features=5000, stop_words='english')
+
+# fit_transform: Learn the vocabulary and turn our tags into a giant matrix of numbers.
+# .toarray(): Scikit-learn returns a sparse matrix (compressed) by default; we expand it for clarity/math.
+vectors = cv.fit_transform(new_df['tags']).toarray()
+
+print("Vector shape:", vectors.shape) # Should be (4806, 5000)
+
+# 2. CALCULATE COSINE SIMILARITY
+# This calculates the distance from EVERY movie to EVERY other movie.
+# It creates a 4806x4806 matrix.
+similarity = cosine_similarity(vectors)
+
+print("Similarity Matrix shape:", similarity.shape)
+print("Similarity score example (First movie vs First movie):", similarity[0][0]) # Should be 1.0
+
+# 3. EXPORT THE BRAIN (PICKLE)
+# We save these objects so the website doesn't have to recalculate this every time it loads.
+pickle.dump(new_df.to_dict(), open('movie_dict.pkl', 'wb'))
+pickle.dump(similarity, open('similarity.pkl', 'wb'))
+pickle.dump(vectors, open('vectors.pkl', 'wb'))
+
+print("Engine built and saved as .pkl files!")
