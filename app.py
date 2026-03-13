@@ -6,6 +6,8 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
 # --- 1. SETUP & DATA LOADING ---
+st.set_page_config(page_title="CineBlend", layout="centered")
+
 @st.cache_resource
 def load_data():
     movie_dict = pickle.load(open('movie_dict.pkl', 'rb'))
@@ -19,7 +21,6 @@ def load_data():
 movies, similarity, vectors = load_data()
 
 # --- 2. SIDEBAR & TITLE ---
-st.set_page_config(page_title="CineBlend", layout="centered")
 st.sidebar.header("CineBlend 🍿")
 
 # Using Shadcn Select for the Mode Switcher (Looks cleaner)
